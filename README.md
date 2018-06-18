@@ -6,7 +6,7 @@ If you have got an Internet connected computer or NAS and you want to automate f
 
 Just create a new Telegram bot (https://core.telegram.org/bots), edit this script and fill in the fields 
 
-* TELEGRAM_BOT_TOKEN: the unique token that indentify your bot 
+* TELEGRAM_BOT_TOKEN: the unique token that indentifies your bot 
 * TELEGRAM_CHAT_ID: you user (or group) id in Telegram. If you do not know it, you can talk to @get_id_bot and send it a "/my_id" command  
 * DOWNLOADS_FOLDER: Change the download directory is desired.
 
