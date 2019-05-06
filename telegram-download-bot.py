@@ -9,6 +9,7 @@
 
 
 import time
+from os import path
 import requests
 
 from multiprocessing import Process, Manager
@@ -38,7 +39,7 @@ def downloader(filenames,urls):
      if filename and filename != "QUIT":
         print "Downloading",filename, 'from',url
         r = requests.get(url, stream=True)
-        with open(filename, 'wb') as f:
+        with open(path.join(DOWNLOADS_FOLDER,filename), 'wb') as f:
            for chunk in r.iter_content(chunk_size=1024): 
               if chunk: 
                   f.write(chunk)
@@ -82,10 +83,10 @@ while not user_quit:
       try:
           user_command=update.message.text
       except AttributeError:
-          user_command=""
+          user_command=None
           pass
 
-      if user_command.lower() == "quit":
+      if user_command and user_command.lower() == "quit":
         filenames.append("QUIT")
         download_process.join()
         user_quit=True
