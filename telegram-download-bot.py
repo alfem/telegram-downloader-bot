@@ -37,13 +37,13 @@ def downloader(filenames,urls):
          time.sleep(5)
 
      if filename and filename != "QUIT":
-        print "Downloading",filename, 'from',url
+        print("Downloading:"+filename+ ' from '+url)
         r = requests.get(url, stream=True)
         with open(path.join(DOWNLOADS_FOLDER,filename), 'wb') as f:
            for chunk in r.iter_content(chunk_size=1024): 
               if chunk: 
                   f.write(chunk)
-        print "Download completed"
+        print("Download completed")
         filename=""
  
 
@@ -105,7 +105,6 @@ while not user_quit:
           newfile.file_size
           bot.send_message(chat_id=TELEGRAM_CHAT_ID, text="Downloading %s (%i bytes)" %(newfile.file_name, newfile.file_size))
           tfile=bot.getFile(newfile.file_id)
-#         print "Newfile:", tfile
           filenames.append(newfile.file_name)          
           urls.append(tfile.file_path)          
       except AttributeError:
