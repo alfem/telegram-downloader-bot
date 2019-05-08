@@ -10,7 +10,9 @@ Just create a new Telegram bot (https://core.telegram.org/bots), edit this scrip
 * TELEGRAM_CHAT_ID: you user (or group) id in Telegram. If you do not know it, you can talk to @get_id_bot and send it a "/my_id" command  
 * DOWNLOADS_FOLDER: Change the download directory is desired.
 
-Install the python bot library, from Gihub (https://github.com/python-telegram-bot/python-telegram-bot) or using pip ( https://pypi.python.org/pypi/python-telegram-bot/)
+Install the python bot library, from Gihub (https://github.com/python-telegram-bot/python-telegram-bot) or using pip ( https://pypi.python.org/pypi/python-telegram-bot/). There are many telegram modules around. Do not use another one with a similar name.
+
+Also "request" module is needed. It is very popular and probably you have it installed already. If not, just use pip or your system package manager.
 
 Run the script and talk to your new bot!
 
