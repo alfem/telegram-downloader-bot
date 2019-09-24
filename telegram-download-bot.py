@@ -47,71 +47,73 @@ def downloader(filenames,urls):
         filename=""
  
 
+
+
+if __name__ == '__main__':
 # START
 
-bot = Bot(TELEGRAM_BOT_TOKEN)
+    bot = Bot(TELEGRAM_BOT_TOKEN)
 
-bot.send_message(chat_id=TELEGRAM_CHAT_ID, text="Downloader ready!")
-bot.send_message(chat_id=TELEGRAM_CHAT_ID, text="Share your file posts with me and I will download them for you.")
+    bot.send_message(chat_id=TELEGRAM_CHAT_ID, text="Downloader ready!")
+    bot.send_message(chat_id=TELEGRAM_CHAT_ID, text="Share your file posts with me and I will download them for you.")
 
-manager = Manager()
-filenames = manager.list()
-urls = manager.list()
-download_process = Process(target=downloader, args=(filenames,urls,))
-download_process.daemon = True
-download_process.start()
+    manager = Manager()
+    filenames = manager.list()
+    urls = manager.list()
+    download_process = Process(target=downloader, args=(filenames,urls,))
+    download_process.daemon = True
+    download_process.start()
 
-update_id=0
-user_quit=False
-
-
+    update_id=0
+    user_quit=False
 
 # MAIN LOOP
 
-while not user_quit:
 
-  try:
-      telegram_updates=bot.get_updates(offset=update_id, timeout=TELEGRAM_TIMEOUT)
-  except:
-      telegram_updates=[]
-
-  for update in telegram_updates:
-#      print update 
-      update_id = update.update_id + 1
-
-# TEXT MESSAGES
-      try:
-          user_command=update.message.text
-      except AttributeError:
-          user_command=None
-          pass
-
-      if user_command and user_command.lower() == "quit":
-        filenames.append("QUIT")
-        download_process.join()
-        user_quit=True
-        telegram_updates=bot.get_updates(offset=update_id, timeout=TELEGRAM_TIMEOUT) # mark this as read or Telegram will send it again
-        break
-
-      elif user_command == "?":
-        bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=str(len(filenames)))
-   
-# FILE MESSAGES
+    while not user_quit:
 
       try:
-          newfile=update.message.document
-          newfile.file_name
-          newfile.file_id
-          newfile.file_size
-          bot.send_message(chat_id=TELEGRAM_CHAT_ID, text="Downloading %s (%i bytes)" %(newfile.file_name, newfile.file_size))
-          tfile=bot.getFile(newfile.file_id)
-          filenames.append(newfile.file_name)          
-          urls.append(tfile.file_path)          
-      except AttributeError:
-          pass
-    
-                 
-  time.sleep(TELEGRAM_REFRESH_SECONDS)
+          telegram_updates=bot.get_updates(offset=update_id, timeout=TELEGRAM_TIMEOUT)
+      except:
+          telegram_updates=[]
+
+      for update in telegram_updates:
+    #      print update 
+          update_id = update.update_id + 1
+
+    # TEXT MESSAGES
+          try:
+              user_command=update.message.text
+          except AttributeError:
+              user_command=None
+              pass
+
+          if user_command and user_command.lower() == "quit":
+            filenames.append("QUIT")
+            download_process.join()
+            user_quit=True
+            telegram_updates=bot.get_updates(offset=update_id, timeout=TELEGRAM_TIMEOUT) # mark this as read or Telegram will send it again
+            break
+
+          elif user_command == "?":
+            bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=str(len(filenames)))
+       
+    # FILE MESSAGES
+
+          try:
+              newfile=update.message.document
+              newfile.file_name
+              newfile.file_id
+              newfile.file_size
+              bot.send_message(chat_id=TELEGRAM_CHAT_ID, text="Downloading %s (%i bytes)" %(newfile.file_name, newfile.file_size))
+              tfile=bot.getFile(newfile.file_id)
+              filenames.append(newfile.file_name)          
+              urls.append(tfile.file_path)          
+          except AttributeError:
+              pass
+        
+                     
+      time.sleep(TELEGRAM_REFRESH_SECONDS)
 
 
 
