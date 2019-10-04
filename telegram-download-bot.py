@@ -72,48 +72,58 @@ if __name__ == '__main__':
 
     while not user_quit:
 
-      try:
-          telegram_updates=bot.get_updates(offset=update_id, timeout=TELEGRAM_TIMEOUT)
-      except:
-          telegram_updates=[]
+        try:
+            telegram_updates=bot.get_updates(offset=update_id, timeout=TELEGRAM_TIMEOUT)
+        except:
+            telegram_updates=[]
 
-      for update in telegram_updates:
-    #      print update 
-          update_id = update.update_id + 1
+        for update in telegram_updates:
+#            print(update) 
+            update_id = update.update_id + 1
 
     # TEXT MESSAGES
-          try:
-              user_command=update.message.text
-          except AttributeError:
-              user_command=None
-              pass
+            try:
+                user_command=update.message.text
+            except AttributeError:
+                user_command=None
+                pass
 
-          if user_command and user_command.lower() == "quit":
-            filenames.append("QUIT")
-            download_process.join()
-            user_quit=True
-            telegram_updates=bot.get_updates(offset=update_id, timeout=TELEGRAM_TIMEOUT) # mark this as read or Telegram will send it again
-            break
+            if user_command and user_command.lower() == "quit":
+                filenames.append("QUIT")
+                download_process.join()
+                user_quit=True
+                telegram_updates=bot.get_updates(offset=update_id, timeout=TELEGRAM_TIMEOUT) # mark this as read or Telegram will send it again
+                break
 
-          elif user_command == "?":
-            bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=str(len(filenames)))
+            elif user_command == "?":
+                bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=str(len(filenames)))
        
     # FILE MESSAGES
 
-          try:
-              newfile=update.message.document
-              newfile.file_name
-              newfile.file_id
-              newfile.file_size
-              bot.send_message(chat_id=TELEGRAM_CHAT_ID, text="Downloading %s (%i bytes)" %(newfile.file_name, newfile.file_size))
-              tfile=bot.getFile(newfile.file_id)
-              filenames.append(newfile.file_name)          
-              urls.append(tfile.file_path)          
-          except AttributeError:
-              pass
+            try:
+                newfile=update.message.document
+                bot.send_message(chat_id=TELEGRAM_CHAT_ID, text="Downloading file %s (%i bytes)" %(newfile.file_name, newfile.file_size))
+                tfile=bot.getFile(newfile.file_id)
+                filenames.append(newfile.file_name)          
+                urls.append(tfile.file_path)          
+            except AttributeError:
+                pass
         
-                     
-      time.sleep(TELEGRAM_REFRESH_SECONDS)
+        # PHOTO MESSAGES
+
+            try:
+                photos=update.message.photo # a list of different available sizes
+                photo=photos[-1]
+                name="{}-{}x{}.jpg".format(update.update_id,photo.width,photo.height)
+                bot.send_message(chat_id=TELEGRAM_CHAT_ID, text="Downloading photo %s (%i bytes)" %(name, photo.file_size))
+                tfile=bot.getFile(photo.file_id)
+                filenames.append(name)          
+                urls.append(tfile.file_path)          
+            except AttributeError:
+                print "Error in photo message"
+                pass
+                        
+        time.sleep(TELEGRAM_REFRESH_SECONDS)
 
 
 
