@@ -7,6 +7,7 @@
 #  telegram_bot https://pypi.python.org/pypi/python-telegram-bot/
 #  a bot token (ask @BotFather)
 
+from __future__ import print_function
 
 import time
 from os import path
@@ -14,7 +15,7 @@ import requests
 
 from multiprocessing import Process, Manager
 from telegram import Bot, ReplyKeyboardMarkup
-from telegram.error import TelegramError
+from telegram.error import BadRequest 
 
 
 # CONFIGURATION
@@ -24,6 +25,7 @@ TELEGRAM_CHAT_ID="YOUR CHAT ID HERE"
 TELEGRAM_REFRESH_SECONDS=1
 DOWNLOADS_FOLDER="/tmp"
 # END CONFIGURATION
+
 
 
 # DOWNLOAD INDEPENDENT PROCESS
@@ -78,7 +80,7 @@ if __name__ == '__main__':
             telegram_updates=[]
 
         for update in telegram_updates:
-#            print(update) 
+            print(update) 
             update_id = update.update_id + 1
 
     # TEXT MESSAGES
@@ -105,7 +107,10 @@ if __name__ == '__main__':
                 bot.send_message(chat_id=TELEGRAM_CHAT_ID, text="Downloading file %s (%i bytes)" %(newfile.file_name, newfile.file_size))
                 tfile=bot.getFile(newfile.file_id)
                 filenames.append(newfile.file_name)          
-                urls.append(tfile.file_path)          
+                urls.append(tfile.file_path)    
+            except BadRequest:
+                bot.send_message(chat_id=TELEGRAM_CHAT_ID, text="Too big file!")    
+                print("Too big file")            
             except AttributeError:
                 pass
         
@@ -113,15 +118,31 @@ if __name__ == '__main__':
 
             try:
                 photos=update.message.photo # a list of different available sizes
-                photo=photos[-1]
-                name="{}-{}x{}.jpg".format(update.update_id,photo.width,photo.height)
-                bot.send_message(chat_id=TELEGRAM_CHAT_ID, text="Downloading photo %s (%i bytes)" %(name, photo.file_size))
-                tfile=bot.getFile(photo.file_id)
+                if len(photos) > 0:  
+                    photo=photos[-1]
+                    name="{}-{}x{}.jpg".format(update.update_id,photo.width,photo.height)
+                    bot.send_message(chat_id=TELEGRAM_CHAT_ID, text="Downloading photo %s (%i bytes)" %(name, photo.file_size))
+                    tfile=bot.getFile(photo.file_id)
+                    filenames.append(name)          
+                    urls.append(tfile.file_path)   
+            except AttributeError:
+                pass
+
+        # VIDEO MESSAGES
+
+            try:
+                video=update.message.video # a video
+                name="{}-{}x{}.mp4".format(update.update_id,video.width,video.height)
+                bot.send_message(chat_id=TELEGRAM_CHAT_ID, text="Downloading video %s (%i bytes)" %(name, video.file_size))
+                tfile=bot.getFile(video.file_id)
                 filenames.append(name)          
                 urls.append(tfile.file_path)          
+            except BadRequest:
+                bot.send_message(chat_id=TELEGRAM_CHAT_ID, text="Too big video!")    
+                print("Too big file video")        
             except AttributeError:
-                print "Error in photo message"
                 pass
+
                         
         time.sleep(TELEGRAM_REFRESH_SECONDS)
 
