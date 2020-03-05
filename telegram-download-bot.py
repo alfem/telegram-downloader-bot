@@ -6,6 +6,8 @@
 # Requires:
 #  telegram_bot https://pypi.python.org/pypi/python-telegram-bot/
 #  a bot token (ask @BotFather)
+#
+# Version: 1.7
 
 from __future__ import print_function
 
@@ -25,6 +27,7 @@ TELEGRAM_CHAT_ID="YOUR CHAT ID HERE"
 TELEGRAM_REFRESH_SECONDS=1
 DOWNLOADS_FOLDER="/tmp"
 # END CONFIGURATION
+
 
 
 
@@ -114,7 +117,7 @@ if __name__ == '__main__':
             except AttributeError:
                 pass
         
-        # PHOTO MESSAGES
+    # PHOTO MESSAGES
 
             try:
                 photos=update.message.photo # a list of different available sizes
@@ -128,7 +131,7 @@ if __name__ == '__main__':
             except AttributeError:
                 pass
 
-        # VIDEO MESSAGES
+    # VIDEO MESSAGES
 
             try:
                 video=update.message.video # a video
@@ -142,6 +145,19 @@ if __name__ == '__main__':
                 print("Too big file video")        
             except AttributeError:
                 pass
+
+    # VOICE MESSAGES
+
+            try:
+                voice=update.message.voice # recorded voice 
+                name="{}.ogg".format(update.update_id)
+                bot.send_message(chat_id=TELEGRAM_CHAT_ID, text="Downloading voice %s (%i bytes)" %(name, voice.file_size))
+                tfile=bot.getFile(voice.file_id)
+                filenames.append(name)          
+                urls.append(tfile.file_path)          
+            except AttributeError:
+                pass
+
 
                         
         time.sleep(TELEGRAM_REFRESH_SECONDS)
