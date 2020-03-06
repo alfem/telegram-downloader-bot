@@ -7,7 +7,7 @@
 #  telegram_bot https://pypi.python.org/pypi/python-telegram-bot/
 #  a bot token (ask @BotFather)
 #
-# Version: 1.7
+# Version: 1.8
 
 from __future__ import print_function
 
@@ -142,9 +142,25 @@ if __name__ == '__main__':
                 urls.append(tfile.file_path)          
             except BadRequest:
                 bot.send_message(chat_id=TELEGRAM_CHAT_ID, text="Too big video!")    
-                print("Too big file video")        
+                print("Too big video file")        
             except AttributeError:
                 pass
+
+    # AUDIO MESSAGES
+
+            try:
+                audio=update.message.audio # audio files 
+                name=u"{}-{}-{}.mp3".format(audio.title,audio.performer,update.update_id)
+                bot.send_message(chat_id=TELEGRAM_CHAT_ID, text="Downloading audio %s (%i bytes)" %(name, audio.file_size))
+                tfile=bot.getFile(audio.file_id)
+                filenames.append(name)          
+                urls.append(tfile.file_path)          
+            except BadRequest:
+                bot.send_message(chat_id=TELEGRAM_CHAT_ID, text="Too big audio!")    
+                print("Too big audio file")        
+            except AttributeError:
+                pass
+
 
     # VOICE MESSAGES
 
