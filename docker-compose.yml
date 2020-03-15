@@ -1,0 +1,11 @@
+version: '3.5'
+
+services:
+  telegram-db-bot:
+    build: .
+    environment:
+      TELEGRAM_BOT_TOKEN: "YOUR TOKEN HERE"
+      TELEGRAM_CHAT_ID: "YOUR CHAT ID HERE"
+    volumes:
+       - ./downloads:/downloads
+    restart: unless-stopped

@@ -12,20 +12,19 @@
 from __future__ import print_function
 
 import time
-from os import path
+from os import path, getenv
 import requests
 
 from multiprocessing import Process, Manager
 from telegram import Bot, ReplyKeyboardMarkup
 from telegram.error import BadRequest 
 
-
 # CONFIGURATION
-TELEGRAM_TIMEOUT=50
-TELEGRAM_BOT_TOKEN="YOUR TOKEN HERE"
-TELEGRAM_CHAT_ID="YOUR CHAT ID HERE"
-TELEGRAM_REFRESH_SECONDS=1
-DOWNLOADS_FOLDER="/tmp"
+TELEGRAM_TIMEOUT=getenv("TELEGRAM_TIMEOUT", 50)
+TELEGRAM_BOT_TOKEN=getenv("TELEGRAM_BOT_TOKEN", "YOUR TOKEN HERE") # <-- Configure here
+TELEGRAM_CHAT_ID=getenv("TELEGRAM_CHAT_ID", "YOUR CHAT ID HERE") # <-- Configure here
+TELEGRAM_REFRESH_SECONDS=getenv("TELEGRAM_REFRESH_SECONDS", 1)
+DOWNLOADS_FOLDER="/downloads"
 # END CONFIGURATION
 
 
