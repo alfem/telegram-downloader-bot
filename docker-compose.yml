@@ -1,7 +1,7 @@
 version: '3.5'
 
 services:
-  postgres:
+  telegram-db-bot:
     build: .
     environment:
       TELEGRAM_BOT_TOKEN: "YOUR TOKEN HERE"
