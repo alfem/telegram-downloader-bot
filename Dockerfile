@@ -1,7 +1,7 @@
 FROM python:3
 
-RUN mkdir /downloads
-RUN pip install python-telegram-bot requests
+RUN mkdir /downloads \
+        && pip install python-telegram-bot requests
 
 COPY ./telegram-download-bot.py .
 
