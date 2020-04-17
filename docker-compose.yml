@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
   telegram-db-bot:
-    build: .
+    image: mitto98/telegram-downloader-bot:latest
     environment:
       TELEGRAM_BOT_TOKEN: "YOUR TOKEN HERE"
       TELEGRAM_CHAT_ID: "YOUR CHAT ID HERE"
