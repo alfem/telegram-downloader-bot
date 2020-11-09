@@ -21,9 +21,9 @@ from telegram.error import BadRequest
 
 # CONFIGURATION
 TELEGRAM_TIMEOUT=getenv("TELEGRAM_TIMEOUT", 50)
-TELEGRAM_BOT_TOKEN=getenv("TELEGRAM_BOT_TOKEN", "YOUR TOKEN HERE") # <-- Configure here
-TELEGRAM_CHAT_ID=getenv("TELEGRAM_CHAT_ID", "YOUR CHAT ID HERE") # <-- Configure here
-TELEGRAM_REFRESH_SECONDS=getenv("TELEGRAM_REFRESH_SECONDS", 1)
+TELEGRAM_BOT_TOKEN=getenv("1325237824:AAHzSXbR8k27idUNgj_09RIfZhdfIKLC5oQ", "YOUR TOKEN HERE") # <-- Configure here
+TELEGRAM_CHAT_ID=getenv("1037565910", "YOUR CHAT ID HERE") # <-- Configure here
+TELEGRAM_REFRESH_SECONDS=getenv("50", 1)
 DOWNLOADS_FOLDER="/downloads"
 # END CONFIGURATION
 
@@ -56,7 +56,7 @@ def downloader(filenames,urls):
 if __name__ == '__main__':
 # START
 
-    bot = Bot(TELEGRAM_BOT_TOKEN)
+    bot = Bot(1325237824:AAHzSXbR8k27idUNgj_09RIfZhdfIKLC5oQ)
 
     bot.send_message(chat_id=TELEGRAM_CHAT_ID, text="Downloader ready!")
     bot.send_message(chat_id=TELEGRAM_CHAT_ID, text="Share your file posts with me and I will download them for you.")
